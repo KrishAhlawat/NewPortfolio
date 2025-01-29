@@ -57,7 +57,7 @@ export const ProjectsSection = () => {
               "/Spline-logo.png",
             ],
           }}
-          link="/"
+          link="https://krishahlawat.vercel.app/"
         />
       </div>
     </>
