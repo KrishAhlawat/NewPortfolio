@@ -1,10 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
-import { HeroHighlight, Highlight } from "../../components/ui/hero-highlight";
+import { HeroHighlightComp, Highlight } from "../../components/ui/hero-highlight";
 
-export function HeroHighlightDemo() {
+export function HeroHighlight() {
   return (
-    <HeroHighlight>
+    <HeroHighlightComp>
       <motion.h1
         initial={{
           opacity: 0,
@@ -24,6 +24,6 @@ export function HeroHighlightDemo() {
         <Highlight className="text-black">Full Stack</Highlight> and{" "}
         <Highlight className="text-black">Next JS Developer</Highlight>
       </motion.h1>
-    </HeroHighlight>
+    </HeroHighlightComp>
   );
 }

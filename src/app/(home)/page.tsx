@@ -1,19 +1,21 @@
 "use client";
 
 import { ExperienceSection } from "./experience-section";
-import { HeroHighlightDemo } from "./hero-section";
-import { NavbarDemo } from "./navbar";
+import { HeroHighlight } from "./hero-section";
+import { Navbar } from "./navbar";
 import { ProjectsSection } from "./(project)/projects-section";
 import { SkillsSection } from "./(skills)/skills-section";
+import { ContactSection } from "./(contact)/contact-section";
 
 export default function Home() {
   return (
     <div>
-      <NavbarDemo />
-      <HeroHighlightDemo />
+      <Navbar />
+      <HeroHighlight />
       <ExperienceSection />
       <ProjectsSection />
       <SkillsSection />
+      <ContactSection />
     </div>
   );
 }
