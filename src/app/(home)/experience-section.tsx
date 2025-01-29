@@ -32,7 +32,7 @@ export function ExperienceSection() {
         <div>
           <p className="text-neutral-200 text-xs md:text-xl font-normal mb-8">
             Secured my first internship as a{" "}
-            <span className="font-bold underline">Frontend Develop Intern</span>{" "}
+            <span className="font-bold underline">Frontend Development Intern</span>{" "}
             at Valsco Technologies, where I had the opportunity to create my
             first personal{" "}
             <Link

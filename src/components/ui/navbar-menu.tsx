@@ -25,7 +25,7 @@ export const MenuItem = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <div className="relative px-0 md:px-2 text-sm md:text-md opacity-[0.6] hover:opacity-100">
+    <div className="relative px-0 md:font-bold md:px-2 text-sm md:text-md opacity-[0.6] hover:opacity-100">
       <motion.p
         transition={{ duration: 0.3 }}
         className="cursor-pointer text-white"
@@ -70,7 +70,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)} // resets the state
-      className="relative rounded-full border border-transparent dark:border-white/[0.2] shadow-input flex justify-center space-x-4 px-8 py-6 "
+      className="relative rounded-full border border-transparent dark:border-white/[0.2] shadow-input flex justify-center space-x-4 px-4 md:px-8 py-4 md:py-6 "
     >
       {children}
     </nav>

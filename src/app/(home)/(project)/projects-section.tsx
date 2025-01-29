@@ -3,9 +3,9 @@ import { ProjectCard } from "./project-card";
 export const ProjectsSection = () => {
   return (
     <>
-      <div className="bg-black text-white text-7xl font-bold text-center pb-10 pt-20">
+      <div className="bg-black text-white text-4xl md:text-7xl font-bold text-center pb-10 pt-20" id="Projects">
         Projects
-        <div className="bg-black text-muted-foreground text-xl font-normal text-center py-5 border-none">
+        <div className="bg-black text-muted-foreground text-base font-normal text-center py-2 md:py-5 border-none">
           I've worked on
         </div>
       </div>

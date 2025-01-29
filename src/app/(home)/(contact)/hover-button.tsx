@@ -11,7 +11,7 @@ export function HoverButton({icon, title}: HoverButtonProps) {
   return (
     <div className="flex justify-center text-center">
       <HoverBorderGradient
-        containerClassName="rounded-full"
+        containerClassName="rounded-full hover:transition hover:duration-500 hover:ease-in-out hover:border-blue-500"
         as="button"
         className="bg-black text-white flex items-center space-x-2"
       >

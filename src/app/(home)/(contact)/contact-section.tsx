@@ -1,17 +1,13 @@
 "use client";
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
 import WorldMapComp from "@/components/ui/world-map";
 import { motion } from "motion/react";
-import Link from "next/link";
-import { MdOutlineEmail } from "react-icons/md";
 import { Footer } from "./footer";
 
 export function ContactSection() {
   return (
-    <div className="py-10 md:py-40 bg-black w-full">
+    <div className="pt-10 md:pt-40 bg-black w-full" id="Contact">
       <div className="max-w-7xl mx-auto text-center">
-        <p className="font-bold text-xl md:text-5xl text-white">
+        <p className="font-bold text-2xl md:text-5xl text-white">
           Remote{" "}
           <span className="text-neutral-400">
             {"Collaboration".split("").map((word, idx) => (
@@ -27,7 +23,7 @@ export function ContactSection() {
             ))}
           </span>
         </p>
-        <p className="text-sm md:text-lg text-neutral-500 max-w-2xl mx-auto py-4">
+        <p className="text-sm md:text-lg text-neutral-500 max-w-2xl mx-2 md:mx-auto py-4">
           Offering seamless remote work capabilities to deliver quality results,
           no matter where I am.
         </p>
