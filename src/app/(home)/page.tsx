@@ -8,7 +8,7 @@ import { SkillsSection } from "./(skills)/skills-section";
 
 export default function Home() {
   return (
-    <div className="h-screen">
+    <div>
       <NavbarDemo />
       <HeroHighlightDemo />
       <ExperienceSection />

@@ -3,7 +3,7 @@ import { ProjectCard } from "./project-card";
 export const ProjectsSection = () => {
   return (
     <>
-      <div className="bg-black text-white text-7xl font-bold text-center py-10">
+      <div className="bg-black text-white text-7xl font-bold text-center pb-10 pt-20">
         Projects
         <div className="bg-black text-muted-foreground text-xl font-normal text-center py-5 border-none">
           I've worked on
@@ -16,7 +16,7 @@ export const ProjectsSection = () => {
           imageSrc="/docs-project.png"
           imageAlt="Docs project"
           skills={{
-            names: ["NextJS", "ReactJS", "typescript", "Shadcn"],
+            names: ["NextJS", "ReactJS", "Typescript", "Shadcn"],
             images: [
               "/nextjs-logo.png",
               "/react-logo.png",

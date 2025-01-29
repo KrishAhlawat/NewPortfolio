@@ -10,7 +10,9 @@ export function ExperienceSection() {
       content: (
         <div>
           <p className="text-neutral-200 text-xs md:text-xl font-normal mb-8">
-            Started learning <b>MERN Stack</b> from scratch.
+            Started learning{" "}
+            <span className="font-bold underline">MERN Stack</span> from
+            scratch.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Image
@@ -29,17 +31,18 @@ export function ExperienceSection() {
       content: (
         <div>
           <p className="text-neutral-200 text-xs md:text-xl font-normal mb-8">
-            I got my first internship as a <b>Frontend Develop Intern</b> at
-            Valsco Technologies. <br />
-            For the first time, I made my personal{" "}
+            Secured my first internship as a{" "}
+            <span className="font-bold underline">Frontend Develop Intern</span>{" "}
+            at Valsco Technologies, where I had the opportunity to create my
+            first personal{" "}
             <Link
               href="https://krishahlawat.vercel.app"
               className="hover:underline text-gray-500 hover:text-white"
               target="_blank"
             >
-              Portfolio
+              portfolio
             </Link>{" "}
-            website using React.
+            website using React and 3D Elements.
           </p>
           <div className="grid grid-cols-2 gap-4">
             <Image
@@ -54,28 +57,34 @@ export function ExperienceSection() {
               alt="feature template"
               width={500}
               height={500}
-              className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
+              className="rounded-lg object-contain h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
             />
           </div>
         </div>
       ),
     },
     {
-      title: "Oct 2024 - Present",
+      title: "Oct 2024",
       content: (
         <div>
           <p className="text-neutral-200 text-xs md:text-xl font-normal mb-4">
-            Completed my internship in september as a{" "}
-            <b>Team Lead (8 members)</b> and started working as a{" "}
-            <b>Full Stack Developer</b> at <Link
+            Completed a successful internship in September as a{" "}
+            <span className="font-bold underline">Team Lead</span> managing a
+            team of <span className="font-bold underline">8 members</span> and
+            transitioned to a{" "}
+            <span className="font-bold underline">Full Stack Developer</span>{" "}
+            role at{" "}
+            <Link
               href="https://www.vitrendz.com/"
               className="hover:underline text-gray-500 hover:text-white"
               target="_blank"
             >
               VITrendz
-            </Link>.
+            </Link>{" "}
+            .
             <br />
-            Made a few projects and learned a lot of new technologies.
+            Gained hands-on experience by working on several projects and
+            acquired proficiency in various new technologies.
           </p>
           {/* <div className="mb-8">
             <div className="flex gap-2 items-center text-neutral-300 text-xs md:text-sm">
@@ -115,6 +124,34 @@ export function ExperienceSection() {
               width={500}
               height={500}
               className="rounded-lg object-cover h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
+            />
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: "Jan 2025 - Present",
+      content: (
+        <div>
+          <p className="text-neutral-200 text-xs md:text-xl font-normal mb-4">
+            Became the{" "}
+            <span className="font-bold underline">Technical Head</span> of{" "}
+            <Link
+              href="https://www.instagram.com/matrix.vit/?utm_source=qr&igsh=ZXhkZWc0N2Fjbmsy#"
+              className="hover:underline text-gray-500 hover:text-white"
+              target="_blank"
+            >
+              Matrix - The Multimedia Club
+            </Link>{" "}
+            of VIT.
+          </p>
+          <div className="grid grid-cols-2 gap-4">
+            <Image
+              src="/matrix-logo.png"
+              alt="matrix logo"
+              width={500}
+              height={500}
+              className="rounded-lg object-contain h-20 md:h-44 lg:h-60 w-full shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]"
             />
           </div>
         </div>
