@@ -54,7 +54,7 @@ export const ProjectsSection = () => {
             images: [
               "/react-logo.png",
               "/tailwind-logo.png",
-              "/Spline-logo.png",
+              "/spline-logo.png",
             ],
           }}
           link="https://krishahlawat.vercel.app/"
