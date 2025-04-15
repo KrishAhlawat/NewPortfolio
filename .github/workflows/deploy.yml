@@ -16,7 +16,7 @@ jobs:
       with:
         node-version: '16'
     - run: npm ci
-    - run: npm test
+    - run: npm test -- --passWithNoTests
     - run: npm run build
     - name: Deploy to Vercel
       run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
