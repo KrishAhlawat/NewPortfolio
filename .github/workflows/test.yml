@@ -1,17 +1,26 @@
-name: Test portfolio
+name: CI
 
-on:
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    container:
-      image: ubuntu:latest
+
     steps:
-      - uses: actions/checkout@v2
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      # 🔴 Remove or comment out this test step since you don't have a "test" script
+      # - name: Run tests
+      #   run: npm test
+
+      - name: Build the project
+        run: npm run build
