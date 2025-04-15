@@ -4,7 +4,7 @@ export function SkillsPart() {
   return (
     <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden rounded-lg mt-10 bg-black md:shadow-xl">
       <span className="pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300 bg-clip-text text-center text-4xl md:text-9xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
-        My Skillset
+        Tech Stack
       </span>
       
       <OrbitingCircles iconSize={40}>
