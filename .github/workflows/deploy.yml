@@ -18,8 +18,5 @@ jobs:
     - run: npm ci
     - run: npm test
     - run: npm run build
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build
+    - name: Deploy to Vercel
+      run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
