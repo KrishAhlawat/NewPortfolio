@@ -1,11 +1,10 @@
 {
     "name": "my-portfolio",
     "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "build" }
-    }
-  ]
+      {
+        "src": "next.config.js",
+        "use": "@vercel/next"
+      }
+    ]
   }
   
