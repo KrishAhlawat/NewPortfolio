@@ -1,0 +1,45 @@
+---
+title: "Debugging a race condition nobody warned me about"
+date: "2026-06-24"
+excerpt: "A silent data corruption bug that only showed up under load, and the week I spent chasing it."
+---
+
+Three weeks into building the Diagnostics Data Dashboard, the app started silently dropping engine records.
+Not crashing. Not erroring. Just gone. A batch of 500 files would go in, and 480 would come out the other side.
+
+The first instinct is always to blame the parser. I didn't.
+
+## The setup
+
+The dashboard ingests XML exports from test rigs sometimes **48,000+ files in a single folder**. Each file gets parsed, normalized, and written into a local SQLite cache so the UI doesn't have to re-read disk on every render.
+
+To speed things up, I'd parallelized the ingestion with a worker pool. Five workers, each grabbing a chunk of files, writing results back to a shared in-memory map before the final flush to SQLite.
+
+It worked fine in every test I ran. Small folders, medium folders, even a 10,000-file stress test on my machine. Then a colleague ran it against a production export and got missing rows.
+
+## Where it actually broke
+
+The bug wasn't in the parsing. It was in how workers reported completion.
+
+Each worker updated a shared `completed` counter and checked `if (completed === totalFiles)` before triggering the flush. That comparison is not atomic in a threaded context two workers could both read `completed` as `totalFiles - 1`, both increment, and both fire the flush condition. The result: two concurrent flushes, one of which committed a stale, incomplete version of the map.
+
+<RaceConditionDiagram />
+
+This only surfaced with five workers and thousands of files, because the timing window for two increments to land close enough together needed real contention. My earlier tests simply hadn't produced enough parallel pressure to expose it.
+
+## The fix
+
+I replaced the counter-and-compare pattern with a proper completion queue, each worker posts a "done" message, and a single coordinator thread tracks completion count and owns the decision to flush. No shared mutable state being read and written from multiple threads at once.
+
+```js
+// before: shared counter, checked from every worker
+if (++completed === totalFiles) flush();
+
+// after: single coordinator owns the decision
+worker.postMessage({ type: "done", id });
+// coordinator increments and checks in one place
+```
+
+## What I took away
+
+Race conditions don't show up in obvious places. They show up exactly where you _stopped_ being careful, the "just increment a counter" code that felt too trivial to double check. If multiple things can write to the same value without a lock, assume they eventually will, at the worst possible moment.

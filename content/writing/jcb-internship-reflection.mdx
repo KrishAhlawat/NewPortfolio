@@ -1,0 +1,27 @@
+---
+title: "What actually broke during my JCB internship"
+date: "2026-06-29"
+excerpt: "Two internal tools, and a running list of everything I didn't expect to go wrong."
+---
+
+Going into the internship, I expected the hard part to be *building* things — designing a dashboard, wiring up a backend, getting the UI right. That part was, honestly, the easy part. The hard part was everything that broke on the way there, most of which I'd never encountered in a college project.
+
+## The Windows problem I didn't see coming
+
+I'd built things on Windows before, but never anything that needed to watch a folder for live file changes. `chokidar`, the file-watching library I reached for, behaved inconsistently — events firing twice, or not firing at all, depending on how a file was written to disk. It took a version downgrade to `chokidar@3.6.0` and a lot of reading GitHub issues to understand this wasn't user error; it was a known rough edge in how Windows reports filesystem events compared to Linux/macOS.
+
+## The scale problem
+
+48,500 files is a number that sounds abstract until your app tries to read all of them synchronously and locks up. Nothing in a typical coursework project prepares you for "what happens when the input is three orders of magnitude larger than your test data." That gap between prototype-scale and production-scale kept showing up in different forms across both projects.
+
+## The deployment problem
+
+Neither project shipped to just one place. The dashboard became a packaged Windows installer via `electron-builder`. The SOP system ended up split across Vercel, Railway, and a Windows machine tunneled through ngrok for an Excel export feature that needed a real Excel installation. Deployment wasn't a final step tacked onto the end — it shaped decisions from early on.
+
+## The part nobody tells you
+
+Internal tools have a different bar than side projects. Nobody's grading based on how clever the code is. They're judging based on whether operations staff can use it without calling you at 6pm. That reframing — optimizing for someone else's Tuesday, not for an impressive commit history — was the biggest shift in how I thought about writing software.
+
+## What stuck
+
+Race conditions, Windows file-system quirks, deploys that need to survive a reboot — none of it was glamorous. All of it was the actual job.

@@ -1,0 +1,42 @@
+---
+title: "Parsing 48,500 XML files without freezing the UI"
+date: "2026-06-8"
+excerpt: "Electron's main process doesn't forgive synchronous work. I found that out the hard way."
+---
+
+The first version of the ECU Dashboard's folder scanner worked perfectly on my test data — a few hundred files. The moment someone pointed it at a real production folder with 48,500 XML files, the entire app froze. Not slow. Frozen. Window unresponsive, spinner stuck, Windows offering to force-close it.
+
+## The mistake
+
+I'd written a `folderFingerprint()` function that walked every file in the target folder, read its metadata, and hashed the combination to detect if anything had changed since the last scan — a cheap way to skip re-parsing untouched folders.
+
+Cheap, except it was synchronous, and it ran on Electron's main process.
+
+Electron's main process is single-threaded, same as any Node.js process. Every synchronous filesystem call — `fs.statSync`, `fs.readFileSync` — blocks that thread completely until it returns. Multiply that by 48,500 files, and you get several seconds (sometimes over a minute) where the entire app, including the UI thread that IPC depends on, cannot respond to anything.
+
+## Fixing it properly
+
+The fix had two parts.
+
+**Move the work off the main process.** File scanning has no business happening there in the first place. I moved `folderFingerprint()` into a dedicated worker thread using Node's `worker_threads`, keeping the main process free to keep handling window events and IPC messages.
+
+**Make it actually asynchronous, not just relocated.** Moving synchronous code into a worker thread just moves the freeze — it stops blocking the *app*, but the worker itself still stalls. I swapped every `Sync` call for its async equivalent (`fs.promises.stat`, `fs.promises.readFile`) and batched the folder walk so it yielded control between chunks instead of running one giant blocking loop.
+
+```js
+// runs in a worker thread, not the main process
+async function folderFingerprint(dir) {
+  const files = await fs.promises.readdir(dir);
+  const stats = await Promise.all(
+    files.map((f) => fs.promises.stat(path.join(dir, f)))
+  );
+  return hashStats(stats);
+}
+```
+
+## The result
+
+Scan time didn't actually change much — reading 48,500 files' metadata still takes real time. What changed is that the UI stayed responsive throughout: progress bar updating, cancel button working, window draggable. The user experience difference between "frozen for a minute" and "working for a minute" turned out to matter far more than raw speed.
+
+## The lesson
+
+In Electron specifically, it's easy to forget the main process is just Node — and Node's main thread has zero patience for synchronous I/O at scale. If it touches the filesystem more than a handful of times, it belongs in a worker, not in a click handler.

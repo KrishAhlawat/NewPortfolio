@@ -1,0 +1,33 @@
+---
+title: "What deploying to Railway, Vercel, and ngrok taught me"
+date: "2026-04-30"
+excerpt: "Shipping one internal tool across three different hosting environments, and why that's a normal amount of duct tape."
+---
+
+The SOP Management System didn't end up on one platform. It ended up on three — and that wasn't a mistake, it was a series of reasonable decisions that added up to something slightly absurd in hindsight.
+
+## Why three platforms
+
+The frontend (Next.js) went to **Vercel** — an easy call, zero config, great for a Next app that just needed to be fast and public.
+
+The backend (NestJS + Supabase) went to **Railway** — Vercel's serverless functions have execution time limits that didn't play well with some of the longer-running SOP export jobs, so a persistent Node process on Railway made more sense.
+
+Then came the Excel export feature. It needed `win32com` — a Python library that talks directly to a real, installed copy of Microsoft Excel via COM automation. That only works on Windows, with Excel actually installed. Neither Vercel nor Railway offer that. So that one piece ran as a small Flask worker on a Windows machine, tunneled out to the internet through **ngrok**.
+
+## What actually went wrong
+
+**CORS, repeatedly.** Three different origins talking to each other meant three separate places to get CORS configuration right, and I got it wrong more than once — usually by fixing it in one service and forgetting the other two needed matching headers.
+
+**ngrok URLs are not stable.** Free-tier ngrok tunnels change their URL on every restart. Every time the Windows machine running the Flask worker rebooted, the backend's hardcoded reference to that tunnel broke silently until someone noticed exports had stopped working.
+
+**Auth tokens don't respect service boundaries.** The Google OAuth flow issued a JWT the frontend trusted for session state — but the Railway backend and the Flask worker each needed to independently verify it, and I'd only originally written verification logic in one place.
+
+## What I'd do differently
+
+Fix the ngrok URL with a paid static domain, or better, wrap the Windows worker behind a lightweight reverse proxy with a stable address instead of relying on ngrok's ephemeral one directly.
+
+Centralize JWT verification into one shared utility function imported by every service, instead of quietly re-implementing it per service and hoping they stayed in sync.
+
+## The actual lesson
+
+Multi-platform deployments aren't a sign something went wrong in the architecture — sometimes the constraints (a Windows-only COM library, serverless timeout limits, wanting a fast static frontend) genuinely point in three different directions. The mistake isn't using three platforms. It's not treating the seams between them as seriously as the code inside each one.
