@@ -3,6 +3,7 @@ import { ThemeProvider } from "next-themes";
 import { generalSans, plexMono, instrumentSerif } from "../lib/fonts";
 import "./globals.css";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "Krish Ahlawat",
@@ -36,6 +37,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <div className="mx-auto max-w-150 px-6">{children}</div>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
