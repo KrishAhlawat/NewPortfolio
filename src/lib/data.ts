@@ -14,7 +14,7 @@ export const projects = [
   {
     title: "SOP Management System",
     tag: "Next.js · NestJS",
-    desc: "Internal tool for JCB Operations to manage, translate, and export SOPs — deployed across Vercel, Railway, and a local Python worker.",
+    desc: "Internal tool for JCB Operations to manage, translate, and export SOPs — deployed across various platforms and a local Python worker.",
     note: "Internal tool — JCB India",
   },
   {
