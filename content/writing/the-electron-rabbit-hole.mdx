@@ -1,0 +1,63 @@
+---
+title: "The Electron rabbit hole: what nobody tells you about desktop apps"
+date: "2026-07-14"
+excerpt: "I'd never built a desktop app before my internship. Here's every wall I hit trying to parse 48,500 XML files in real time."
+---
+
+I had never built a desktop app before this internship.
+
+I'd built web apps, APIs, internal tools but never something that lived on a Windows machine, watched a folder, parsed files, and updated a UI in real time. When I was handed this problem, I reached for the most familiar tools I could find: **Electron, React, Vite**. Web technologies. How different could it be?
+
+Very different, as it turns out.
+
+## The file watcher that didn't watch
+
+The first requirement was simple: when someone adds or deletes a file from a local folder, the dashboard should update automatically. No refresh. No manual trigger.
+
+I reached for `chokidar` the standard file-watching library in the Node.js ecosystem. It worked fine in development. Then it didn't. Events would fire twice. Sometimes they wouldn't fire at all. The dashboard would get stuck in a loading state, waiting for an update that never came.
+
+The root cause wasn't my code. It was how Windows reports filesystem events compared to Linux and macOS. Windows batches and delays certain events in ways that `chokidar`'s newer versions don't handle cleanly. The fix was a version downgrade to `chokidar@3.6.0` and a lot of time reading GitHub issues from people who'd hit the same wall.
+
+The lesson: the npm package that works perfectly on your MacBook may behave completely differently on the Windows machine it's actually shipping to. Test on the target OS early. Not after you've built everything.
+
+## 48,500 files and a frozen UI
+
+The dashboard needed to parse XML files engine test records, one file per test. In development I was testing with a handful of files. In production there were 48,500 of them.
+
+The first version read every file on every change. Add one file, re-read all 48,500. The UI would freeze completely on startup. Not slow, frozen. Electron's main process was blocking while it worked through the entire directory synchronously.
+
+The fix had two parts.
+
+First: only read what changed. On file add, parse the new file. On file delete, remove it from the cache. Stop touching everything else.
+
+Second: cache aggressively. On first startup, parse everything and write to a JSON cache. Every subsequent run reads from cache unless something changed. First render is still slow (48k files is 48k files) but after that, updates are near-instant.
+
+The broader lesson: prototype-scale and production-scale are different problems. A loop that works fine on 50 items can bring an app to its knees on 50,000. The gap between the two is where most real engineering happens.
+
+## The IPC problem nobody warned me about
+
+This one took the longest to debug.
+
+In Electron, your app runs in two separate processes: the main process (Node.js, has access to the filesystem) and the renderer process (Chromium, runs your React UI). They can't share memory directly. They communicate through **IPC (Inter-Process Communication)** by sending messages back and forth.
+
+The main process was parsing files correctly. I could see the data in logs. But the dashboard wasn't updating. The UI just sat there, stale, showing nothing new.
+
+The data was getting lost somewhere between the two processes.
+
+The issue was in how I'd set up `ipcRenderer`. The connection existed but wasn't receiving correctly on the renderer side. The listener wasn't properly attached when the data arrived, so the messages were broadcasting into nothing.
+
+The fix was making sure the IPC listener was registered before any data could arrive, and keeping that connection consistent for the lifetime of the app.
+
+Web development doesn't prepare you for this mental model. In a web app, your frontend and backend talk over HTTP request, response, done. In Electron, you're managing a persistent bidirectional channel between two processes running on the same machine. When it breaks, there's no network tab to inspect. You're reading logs and working backwards.
+
+## What desktop development actually is
+
+Coming from web development, I expected the hard parts to be UI and state management. Those were fine. The hard parts were:
+
+- File system behavior differences across operating systems
+- Performance at scales that never show up in side projects
+- A process architecture that has no direct equivalent in web development
+
+None of it was glamorous. All of it was the actual job.
+
+If you're a web developer thinking about building a desktop app — do it. Just don't assume your existing mental models will transfer cleanly. They won't. And that's exactly why it's worth doing.
